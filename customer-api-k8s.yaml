@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: customer-api
-        image: damon.azurecr.io/customer-api:v1
+        image: damon.azurecr.io/customer-api:v2
         ports:
         - containerPort: 80
         resources:
