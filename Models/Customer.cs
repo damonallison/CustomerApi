@@ -1,3 +1,5 @@
+using System;
+
 namespace CustomerApi.Models
 {
     public class Customer
@@ -5,6 +7,13 @@ namespace CustomerApi.Models
         public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string MachineName
+        {
+            get
+            {
+                   return Environment.MachineName;
+            }
+        }
 
         public Customer(long id, string firstName, string lastName) {
             this.Id = id;
