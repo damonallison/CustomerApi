@@ -40,11 +40,15 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: test
-        projects: '**/*Tests/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
+    #
+    # This task will fail! The build is containerized.
+    # We need to run the tests *before* building to docker
+    #
+    # - task: DotNetCoreCLI@2
+    #   inputs:
+    #     command: test
+    #     projects: '**/*Tests/*.csproj'
+    #     arguments: '--configuration $(buildConfiguration)'
     - upload: manifests
       artifact: manifests
 
