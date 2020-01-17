@@ -14,6 +14,13 @@ namespace CustomerApi.Models
                    return Environment.MachineName;
             }
         }
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName} ${LastName}";
+            }
+        }
 
         public Customer(long id, string firstName, string lastName) {
             this.Id = id;
