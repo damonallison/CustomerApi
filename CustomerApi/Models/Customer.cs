@@ -18,7 +18,7 @@ namespace CustomerApi.Models
         {
             get
             {
-                return $"{FirstName} ${LastName}";
+                return $"{FirstName} {LastName}";
             }
         }
 
