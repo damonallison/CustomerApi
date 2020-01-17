@@ -49,7 +49,6 @@ stages:
   jobs:
   - job: Test
     displayName: Test
-    dependsOn: [Build]
     pool:
       vmImage: ${vmImageName}
     steps:
