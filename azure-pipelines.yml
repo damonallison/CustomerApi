@@ -40,27 +40,13 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-
-    - upload: manifests
-      artifact: manifests
-
-- stage: Test
-  displayName: Test stage
-  jobs:
-  - job: Test
-    displayName: Test
-    pool:
-      vmImage: ${vmImageName}
-    steps:
-      # ...
-      # do this after other tasks such as building
-      #
     - task: DotNetCoreCLI@2
-      displayName: Run test task
       inputs:
         command: test
         projects: '**/*Tests/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
+    - upload: manifests
+      artifact: manifests
 
 - stage: Deploy
   displayName: Deploy stage
