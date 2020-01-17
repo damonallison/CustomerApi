@@ -20,12 +20,12 @@ variables:
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
-  
+
 
 stages:
 - stage: Build
   displayName: Build stage
-  jobs:  
+  jobs:
   - job: Build
     displayName: Build
     pool:
@@ -40,14 +40,32 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-          
+
     - upload: manifests
       artifact: manifests
 
+- stage: Test
+  displayName: Test stage
+  jobs:
+  - job: Test
+    displayName: Test
+    dependsOn: [Build]
+    pool:
+      vmImage: ${vmImageName}
+    steps:
+      # ...
+      # do this after other tasks such as building
+      #
+    - task: DotNetCoreCLI@2
+      displayName: Run test task
+      inputs:
+        command: test
+        projects: '**/*Tests/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
 - stage: Deploy
   displayName: Deploy stage
-  dependsOn: Build
-
+  dependsOn: [Build, Test]
   jobs:
   - deployment: Deploy
     displayName: Deploy
@@ -64,7 +82,7 @@ stages:
               action: createSecret
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-              
+
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
