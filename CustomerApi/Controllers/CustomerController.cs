@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CustomerApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Repositories;
@@ -20,9 +21,11 @@ namespace CustomerApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IEnumerable<Customer> Get()
         {
             return new CustomerRepository().GetCustomers();
         }
+
     }
 }
