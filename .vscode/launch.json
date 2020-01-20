@@ -11,12 +11,19 @@
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/CustomerApi/bin/Debug/netcoreapp3.1/CustomerApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/CustomerApi",
             "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-            },
+
+            //
+            // Uncomment if you want to open a URL in a web browser whenever the
+            // program outputs a specific message to the debug console or
+            // integrated terminal window.
+            //
+            // "serverReadyAction": {
+            //     "action": "openExternally",
+            //     "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            // },
+
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },

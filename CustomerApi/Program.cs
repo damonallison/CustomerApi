@@ -11,6 +11,9 @@ namespace CustomerApi
 {
     public class Program
     {
+        /// Creates and runs the default web host.
+        ///
+        /// By default, ASP.NET Core will use the kestrel HTTP server.
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

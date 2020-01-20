@@ -10,20 +10,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using CustomerApi.Models;
+using CustomerApi.Repositories;
 
 namespace CustomerApi
 {
+    /// The startup class builds up a Host object at startup. The host includes:
+    ///
+    /// * An HTTP Server
+    /// * Middleware
+    /// * Logging
+    /// * DI
+    /// * Configuration
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        /// Only the following service types can be injected into the
+        /// <c>Startup</c> constructor
+        ///
+        /// * IWebHostEnvironment
+        /// * IHostEnvironment
+        /// * IConfiguration
+        public Startup(IConfiguration configuration,
+                       IWebHostEnvironment webHostEnvironment)
+
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
+
+            Console.WriteLine($"Environment: {WebHostEnvironment.EnvironmentName}");
+            Console.WriteLine($"ContentRootPath: {WebHostEnvironment.ContentRootPath}");
         }
 
         public IConfiguration Configuration { get; }
+        private IWebHostEnvironment WebHostEnvironment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// This method gets called by the runtime. Use this method to add
+        /// services to the container.
+        ///
+        /// ASP.NET has a built in DI container, but it could be swapped out
+        /// with a different DI container.
         public void ConfigureServices(IServiceCollection services)
         {
             //
@@ -48,13 +75,38 @@ namespace CustomerApi
                 options.RequireHttpsMetadata = false;
             });
 
+            // Custom settings
+            services.Configure<CustomerDatabaseSettings>(Configuration.GetSection(nameof(CustomerDatabaseSettings)));
+            services.AddSingleton<ICustomerDatabaseSettings>(sp => sp.GetRequiredService<IOptions<CustomerDatabaseSettings>>().Value);
+
+            // Repositories
+            services.AddSingleton<CustomerRepository>();
+
+            //
+            // Generic service registration methods:
+            //
+            // services.AddTransient
+            // services.AddSingleton
+            // services.AddScoped
+
             services.AddControllers();
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        /// This method gets called by the runtime. Use this method to configure
+        /// the HTTP request pipeline.
+        ///
+        /// By convention, middleware is added to the pipeline by calling it's
+        /// <c>Use...</c> method.
+        ///
+        /// The environment is controlled an environment variable:
+        /// <c>ASPNETCORE_ENVIRONMENT</c>
+        /// <c>IHostingEnvironment></c> is available anywhere in the app
+        /// via DI.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
