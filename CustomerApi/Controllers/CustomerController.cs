@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 using CustomerApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -66,6 +68,12 @@ namespace CustomerApi.Controllers
             return CreatedAtAction(nameof(GetById), new { id = customer.Id}, customer);
         }
 
+        public void Test() {
+            IList<string> strings = new List<String>() {
+                "damon", "ryan", "allison"
+            };
+            strings.Where(s => s.Length > 4);
+        }
 
 
     }
